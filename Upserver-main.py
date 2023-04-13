@@ -7,7 +7,7 @@ bot = commands.Bot(command_prefix=('!'))
 @bot.event
 async def on_ready():
     print("Я запущен!")
-    await bot.change_presence(status=discord.Status.idle, activity=discord.Game("wait your comand :D"), afk=True)
+    await bot.change_presence(status=discord.Status.idle, activity=discord.Game("wait your command :D"), afk=True)
 
 @bot.command()
 async def lx(ctx, *text):
