@@ -1,36 +1,54 @@
 import discord
 from discord.ext import commands
+import settings
 import random
-TOKEN = "MTAwNTU1NjAyNDcwODcxNDQ5Ng.G_rGMJ.Grl93vvL41--svtgGBhgBJSeJAeGkzr7bVleIA"
 
-bot = commands.Bot(command_prefix=('!'))
+intents = discord.Intents.default()
+client = discord.Client(intents=intents)
+intents.message_content = True
+intents.members = True
+bot = commands.Bot(command_prefix=settings.PREFIX, intents=intents,
+                   activity=discord.Game(name="!help"))
+
+
 @bot.event
 async def on_ready():
-    print("Я запущен!")
-    await bot.change_presence(status=discord.Status.idle, activity=discord.Game("wait your command :D"), afk=True)
+   print("бот работает")
 
-@bot.command()
-async def lx(ctx, *text):
-    channel = bot.get_channel(id=int((1005755492200632381)))
-    await channel.send(*text)
+#вообще-то оно работать должно
+@client.event
+async def on_message_join(member):
+    channel = client.get_channel(1096361181574340649)
+    embed=discord.Embed(title=f"Welcome {member.name}",
+                        description=f"Thanks for joining {member.guild.name}!")
+    embed.set_thumbnail(url=member.avatar_url)
+
+    await channel.send(embed=embed)
 
 
-@bot.command()
-async def report(ctx):
-    user = await bot.fetch_user(user_id=575345431240769548)
-    await user.send('bug report')
+@bot.event
+async def on_message(message):
+   for i in settings.ban_words:
+      if i in message.content:
+         await message.delete()
+         await message.channel.send(f"{message.author.mention} Не выражаться!")
+         return
+   await bot.process_commands(message)
 
-@bot.command()
-async def hi(ctx):
-    await ctx.send("Привет")
 
-@bot.command()
+@bot.command(name="flip", description="Орел и решка")
 async def flip(ctx):
     coins = ["орел", "решка"]
     embed = discord.Embed(
         title=random.choice(coins),
+        color=discord.Color.red()
     )
     await ctx.send(embed=embed)
 
 
-bot.run(TOKEN)
+@bot.command(name='hello', description="Бот приветсвует вас")
+async def hello(ctx):
+    await ctx.send(f"Привет {ctx.author.name}!")
+
+
+bot.run(settings.TOKEN)
