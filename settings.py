@@ -1,4 +1,4 @@
-TOKEN = "MTA5ODMzMTQxODMxODM0NDE5Mw.GyjwsH.vIXgCufPNMKN2tcEaEsLN61Fjre15iAmpkEvmU"
+TOKEN = "MTA5ODMzMTQxODMxODM0NDE5Mw.GGPpds.Zsj7H-lbCih8SlgSks3306KAAgl90Sb6jFvOdc"
 PREFIX = "!"
 ban_words = ["лодыри", "бездельники", "лох", "неудачники", "даун", "дурак", "идиот", "придурок",
              "лодырь", "бездельник"]
