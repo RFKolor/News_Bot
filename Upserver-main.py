@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands
 import settings
 import random
+import sys
+import datetime
 
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)
@@ -77,6 +79,22 @@ async def authors(ctx):
     )
     await ctx.send(embed=embed1)
     await ctx.send(embed=embed2)
+
+
+@bot.command(name="about", description="краткая информация о боте")
+async def about(ctx):
+    open_file = open("about.txt", encoding="utf-8")
+    text = open_file.read()
+    await ctx.send(text)
+
+
+@bot.command(name="feedback", description="позволяет вам отправить пожелания разработчику")
+async def feedback(ctx, *text):
+    channel = bot.get_channel(1098579383775658126)
+    await channel.send(f"Дата и время: {datetime.datetime.today()}")
+    await channel.send(f"Отправитель: {ctx.author.mention}")
+    await channel.send("Пожеалния")
+    await channel.send(*text)
 
 
 bot.run(settings.TOKEN)
