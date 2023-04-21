@@ -2,7 +2,6 @@ import discord
 from discord.ext import commands
 import settings
 import random
-import sys
 import datetime
 
 intents = discord.Intents.default()
@@ -91,10 +90,74 @@ async def about(ctx):
 @bot.command(name="feedback", description="позволяет вам отправить пожелания разработчику")
 async def feedback(ctx, *text):
     channel = bot.get_channel(1098579383775658126)
-    await channel.send(f"Дата и время: {datetime.datetime.today()}")
-    await channel.send(f"Отправитель: {ctx.author.mention}")
-    await channel.send("Пожеалния")
-    await channel.send(*text)
+    dt = datetime.datetime.now()
+    author = ctx.author.mention
+    await channel.send(f"Дата и время: { dt.strftime('%H:%M - %m.%d.%Y года')},")
+    await channel.send(f"Отправитель: {author},")
+    await channel.send(f"Пожеалния: {''.join(text)}.")
+
+
+@bot.command(name="ban", description="Позволяет людям с ролью 'Модератор' банить пользователей")
+@commands.has_permissions(ban_members=True)
+async def ban(ctx, member: discord.Member = None, reason=None):
+    moderator_role = 1099039238227509348
+    if member:
+        if moderator_role in [role.id for role in ctx.author.roles]:
+            if reason is None:
+                await ctx.send("Напишите причну бана.")
+            else:
+                await member.ban(reason=reason)
+                await ctx.send(f"Вы успешно забанили пользователя {member}.Прична: {reason}")
+                await member.send(f"Вас забанили на сервере."
+                                  f"Забанивший модератор {ctx.author.mention}.")
+        else:
+            await ctx.send("У вас недостаточно прав для использования этой команды.")
+    else:
+        await ctx.send("Укажиет имя пользователя")
+
+
+@bot.command(name="unban",
+             description="Позволяет людям с ролью 'Модератор' разбанить пользователей")
+async def unban(ctx, member: discord.User = None):
+    moderator_role = 1099039238227509348
+    invite = ctx.channel.create_invite()
+    if member:
+        if moderator_role in [role.id for role in ctx.author.roles]:
+            await ctx.guild.unban(member)
+            await ctx.send(f"Вы успешно разбанили пользователя {member}.")
+            await member.send(f"Вас разабанили на сервере."
+                              f"Разбанивший модератор {ctx.author.mention}.")
+            await member.send(invite)
+        else:
+            await ctx.send("У вас недостаточно прав для использования этой команды.")
+    else:
+        await ctx.send("Укажиет имя пользователя")
+
+
+@bot.command(name="kick", description="Позволяет людям с ролью 'Модератор' кикать пользователей.")
+async def kick(ctx, member: discord.Member = None, reason=None):
+    moderator_role = 1099039238227509348
+    if moderator_role in [role.id for role in ctx.author.roles]:
+        if reason:
+            await member.kick(member, reason=reason)
+            await ctx.send(f"Вы успешно кикнули пользователя {member}.Прична: {reason}")
+            await member.send(f"Вас кикнули с сервера.Кикнувший модератор{ctx.author.mention}")
+
+    else:
+        await ctx.send("У вас недостаточно прав для использования этой команды.")
+
+
+@bot.command(name="get_roles", description="все роли на сервере")
+async def get_roles(ctx):
+    all_roles = []
+    for role in ctx.guild.roles:
+        all_roles.append(role.name)
+    embed = discord.Embed(
+        title="\n".join(all_roles),
+        description="все роли",
+        colour=discord.Color.purple()
+    )
+    await ctx.send(embed=embed)
 
 
 bot.run(settings.TOKEN)
