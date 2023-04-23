@@ -21,7 +21,7 @@ async def help(ctx):
         description="Используйте !help <команда>, чтобы получить описание команды",
         color=discord.Color.random())
     embed.add_field(name="Модерация", value="ban, kick, unban")
-    embed.add_field(name="Развлечния", value="flip, rps, hello")
+    embed.add_field(name="Развлечния", value="flip, rps, hello, give_role")
     embed.add_field(name="Сайт, Бот", value="link, about, get_roles")
     embed.add_field(name="Авторы", value="authors, feedback")
     await ctx.send(embed=embed)
@@ -142,6 +142,17 @@ async def feedback(ctx):
     await ctx.send(embed=embed)
 
 
+@help.command()
+async def give_role(ctx):
+    embed = discord.Embed(
+        title="give_role",
+        description="Вы можете получить из списка доступных ролей,список доступных ролей можно"
+                    "посмотреть введя команду !get_roles",
+        color=discord.Color.green())
+    embed.add_field(name="**Синтаксис**", value="!give_role <название роли>")
+    await ctx.send(embed=embed)
+
+
 @bot.event
 async def on_ready():
    print("бот работает")
@@ -151,6 +162,7 @@ async def on_ready():
 async def on_member_join(member):
     channel = bot.get_channel(1096361181574340649)
     role = discord.utils.get(member.guild.roles, id=1099246641325813781)
+    #выдается роль посетитель
     await member.add_roles(role)
     await channel.send(embed=discord.Embed(description=f"{member.mention}, "
                                                        f"добро пожаловать на сервер!",
@@ -164,6 +176,7 @@ async def on_member_remove(member):
                                            color=discord.Color.green()))
 
 
+# поиск запрщенных слов в тексте, модерация чата
 @bot.event
 async def on_message(message):
    for i in settings.ban_words:
@@ -218,6 +231,7 @@ async def authors(ctx):
     await ctx.send(embed=embed2)
 
 
+#описание возможностей бота, его разработчики и его версия
 @bot.command(name="about")
 async def about(ctx):
     open_file = open("about.txt", encoding="utf-8")
@@ -225,6 +239,8 @@ async def about(ctx):
     await ctx.send(text)
 
 
+#что-то вроде книг жалоб и пожеланий, введеное сообщение отпрваляется в приватный канал,который вижу
+#только я и Рома
 @bot.command(name="feedback")
 async def feedback(ctx, *text):
     channel = bot.get_channel(1098579383775658126)
@@ -239,7 +255,6 @@ async def feedback(ctx, *text):
 @commands.has_permissions(ban_members=True)
 async def ban(ctx, member: discord.Member = None, reason=None):
     moderator_role = 1099039238227509348
-    text = ""
     if member:
         if moderator_role in [role.id for role in ctx.author.roles]:
             if reason is None:
@@ -254,6 +269,7 @@ async def ban(ctx, member: discord.Member = None, reason=None):
     await ctx.send(text)
 
 
+#чтобы не крашилось при ошибке
 @ban.error
 async def ban_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
@@ -275,6 +291,7 @@ async def unban(ctx, member: discord.User = None):
         await ctx.send("Укажите имя пользователя")
 
 
+#чтобы не крашилось при ошибке
 @unban.error
 async def unban_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
@@ -296,6 +313,7 @@ async def kick(ctx, member: discord.Member = None, *, reason=None):
     await ctx.send(text)
 
 
+#чтобы не крашилось при ошибке
 @kick.error
 async def kick_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
@@ -305,14 +323,25 @@ async def kick_error(ctx, error):
 @bot.command(name="get_roles")
 async def get_roles(ctx):
     all_roles = []
+    public_roles = ["Чтобы получить роль введтике команду !give_role <название роли>",
+                    "Разработчик-ботов",
+                    "WEB-разработчик",
+                    "Питонист",
+                    "Посетитель"]
     for role in ctx.guild.roles:
         all_roles.append(role.name)
     embed = discord.Embed(
         title="Все роли",
-        description="\n".join(all_roles),
+        description="\n".join(all_roles[1:]),
+        colour=discord.Color.purple()
+    )
+    embed2 = discord.Embed(
+        title="Доступные для получения роли",
+        description="\n".join(public_roles),
         colour=discord.Color.purple()
     )
     await ctx.send(embed=embed)
+    await ctx.send(embed=embed2)
 
 
 @bot.command(name="rps")
@@ -346,7 +375,23 @@ async def rps(ctx, text):
             await ctx.send("Ты победил, молодец!")
             await member.add_roles(role)
     else:
-        await ctx.send("Неправильный ввод")
+        await ctx.send("Неправильный ввод.Повторите попытку")
+
+
+# выдача ролей
+@bot.command(name="give_role")
+async def give_role(ctx, text):
+    public_roles = {
+        "Разработчик-ботов": 1099667375407763477,
+        "WEB-разработчик": 1099667262304178288,
+        "Питонист": 1099667185409982515
+    }
+    try:
+        role = discord.utils.get(ctx.author.guild.roles, id=public_roles[text])
+        await ctx.author.add_roles(role)
+        await ctx.send(f"Вы успешно получили роль {text}.")
+    except Exception:
+        await ctx.send(f"Повторите попытку, вы не можете получить роль {text}.")
 
 
 bot.run(settings.TOKEN)
