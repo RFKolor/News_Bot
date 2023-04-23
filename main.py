@@ -305,7 +305,7 @@ async def kick(ctx, member: discord.Member = None, *, reason=None):
     if moderator_role in [role.id for role in ctx.author.roles]:
         if reason:
             await member.kick(reason=reason)
-            text = f"Вы успешно кикнули пользователя {member}.Прична: {reason}"
+            text = f"Вы успешно кикнули пользователя {member}.Причина: {reason}."
         else:
             text = "Укажите причину кика"
     else:
@@ -375,6 +375,12 @@ async def rps(ctx, text):
             await ctx.send("Ты победил, молодец!")
             await member.add_roles(role)
     else:
+        await ctx.send("Неправильный ввод.Повторите попытку")
+
+#чтобы не крашилось при ошибке
+@rps.error
+async def rps(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
         await ctx.send("Неправильный ввод.Повторите попытку")
 
 
