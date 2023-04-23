@@ -377,6 +377,7 @@ async def rps(ctx, text):
     else:
         await ctx.send("Неправильный ввод.Повторите попытку")
 
+
 #чтобы не крашилось при ошибке
 @rps.error
 async def rps(ctx, error):
