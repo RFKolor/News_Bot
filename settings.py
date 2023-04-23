@@ -2,4 +2,4 @@ TOKEN = "MTA5ODMzMTQxODMxODM0NDE5Mw.GGPpds.Zsj7H-lbCih8SlgSks3306KAAgl90Sb6jFvOd
 PREFIX = "!"
 ban_words = ["лодыри", "бездельники", "лох", "неудачники", "даун", "дурак", "идиот", "придурок",
              "лодырь", "бездельник"]
-guild_welcome = {1096361181574340649}
+link = "https://discord.gg/V3UvtaC5qC"
