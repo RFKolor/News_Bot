@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="76d5bc59-3474-4b38-8550-f20c1aead908" name="Changes" comment="все готово(кроме отправки ссылок после разабана)">
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+    <list default="true" id="76d5bc59-3474-4b38-8550-f20c1aead908" name="Changes" comment="починил !rps">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -163,7 +163,21 @@
       <option name="project" value="LOCAL" />
       <updated>1682261814189</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="починил !rps">
+      <created>1682270843208</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1682270843208</updated>
+    </task>
+    <task id="LOCAL-00011" summary="починил !rps">
+      <created>1682270887391</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1682270887391</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -189,6 +203,7 @@
     <MESSAGE value="работающие баны и разбаны(кроме приглашения), переработка !help.Почти все готово" />
     <MESSAGE value="название файла поменял" />
     <MESSAGE value="все готово(кроме отправки ссылок после разабана)" />
-    <option name="LAST_COMMIT_MESSAGE" value="все готово(кроме отправки ссылок после разабана)" />
+    <MESSAGE value="починил !rps" />
+    <option name="LAST_COMMIT_MESSAGE" value="починил !rps" />
   </component>
 </project>
